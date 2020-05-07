@@ -114,7 +114,7 @@ def time(update, context):
 def confirmation(update, context):
     user_data = context.user_data
     user = update.message.from_user
-    update.message.reply_text("Thank you! I will post the information on the channel @foodrescuers now.", reply_markup=ReplyKeyboardRemove())
+    update.message.reply_text("Thank you! I will post the information on the channel @" + chat_id + "  now.", reply_markup=ReplyKeyboardRemove())
     if (user_data['Photo Provided'] == 'Yes'):
         del user_data['Photo Provided']
         bot.send_photo(chat_id=chat_id, photo=open('user_photo.jpg', 'rb'), 
@@ -128,7 +128,7 @@ def confirmation(update, context):
     geocode_result = gmaps.geocode(user_data['Location'])
     lat = geocode_result[0]['geometry']['location'] ['lat']
     lng = geocode_result[0]['geometry']['location']['lng']
-    bot.send_location(chat_id='@foodrescuers', latitude=lat, longitude=lng)
+    bot.send_location(chat_id=chat_id, latitude=lat, longitude=lng)
 
     return ConversationHandler.END
 
