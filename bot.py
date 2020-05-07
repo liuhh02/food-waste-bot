@@ -18,7 +18,7 @@ reply_keyboard = [['Confirm', 'Restart']]
 markup = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
 TOKEN = 'YOURTELEGRAMBOTTOKEN'
 bot = telegram.Bot(token=TOKEN)
-
+chat_id = 'YOURTELEGRAMCHANNEL'
 GMAPSAPI = 'YOURGOOGLEMAPSAPITOKEN'
 gmaps = GoogleMaps(GMAPSAPI)
 
@@ -117,12 +117,12 @@ def done(update, context):
     update.message.reply_text("Thank you! I will post the information on the channel @foodrescuers now.", reply_markup=ReplyKeyboardRemove())
     if (user_data['Photo Provided'] == 'Yes'):
         del user_data['Photo Provided']
-        bot.send_photo(chat_id='@foodrescuers', photo=open('user_photo.jpg', 'rb'), 
+        bot.send_photo(chat_id=chat_id, photo=open('user_photo.jpg', 'rb'), 
 		caption="<b>Food is Available!</b> Check the details below: \n {}".format(facts_to_str(user_data)) +
 		"\n For more information, message the poster {}".format(user.name), parse_mode=telegram.ParseMode.HTML)
     else:
         del user_data['Photo Provided']
-        bot.sendMessage(chat_id='@foodrescuers', 
+        bot.sendMessage(chat_id=chat_id, 
             text="<b>Food is Available!</b> Check the details below: \n {}".format(facts_to_str(user_data)) +
         "\n For more information, message the poster {}".format(user.name), parse_mode=telegram.ParseMode.HTML)
     geocode_result = gmaps.geocode(user_data['Location'])
