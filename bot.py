@@ -12,7 +12,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-GENDER, PHOTO, LOCATION, BIO, TIME, DONE = range(6)
+LOCATION, PHOTO, DIET, SERVINGS, TIME, CONFIRMATION = range(6)
 
 reply_keyboard = [['Confirm', 'Restart']]
 markup = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
@@ -37,10 +37,10 @@ def start(update, context):
     update.message.reply_text(
         "Hi! I am your posting assistant to help you advertise your leftover food to reduce food waste. "
         "To start, please type the location of the leftover food.")
-    return GENDER
+    return LOCATION
 
 
-def gender(update, context):
+def location(update, context):
     user = update.message.from_user
     user_data = context.user_data
     category = 'Location'
@@ -63,7 +63,7 @@ def photo(update, context):
     logger.info("Photo of %s: %s", user.first_name, 'user_photo.jpg')
     update.message.reply_text('Great! Is the food halal? Vegetarian? Please type in the dietary specifications of the food.')
 
-    return LOCATION
+    return DIET
 
 
 def skip_photo(update, context):
@@ -74,10 +74,10 @@ def skip_photo(update, context):
     logger.info("User %s did not send a photo.", user.first_name)
     update.message.reply_text('Is the food halal? Vegetarian? Please type in the dietary specifications of the food.')
 
-    return LOCATION
+    return DIET
 
 
-def location(update, context):
+def diet(update, context):
     user = update.message.from_user
     user_data = context.user_data
     category = 'Dietary Specifications'
@@ -86,9 +86,9 @@ def location(update, context):
     logger.info("Dietary Specification of food: %s", update.message.text)
     update.message.reply_text('How many servings are there?')
 
-    return BIO
+    return SERVINGS
 
-def bio(update, context):
+def servings(update, context):
     user = update.message.from_user
     user_data = context.user_data
     category = 'Number of Servings'
@@ -109,9 +109,9 @@ def time(update, context):
 	update.message.reply_text("Thank you for providing the information! Please check the information is correct:"
 								"{}".format(facts_to_str(user_data)), reply_markup=markup)
 
-	return DONE
+	return CONFIRMATION
 
-def done(update, context):
+def confirmation(update, context):
     user_data = context.user_data
     user = update.message.from_user
     update.message.reply_text("Thank you! I will post the information on the channel @foodrescuers now.", reply_markup=ReplyKeyboardRemove())
@@ -161,18 +161,18 @@ def main():
 
         states={
 
-            GENDER: [CommandHandler('start', start), MessageHandler(Filters.text, gender)],
+            LOCATION: [CommandHandler('start', start), MessageHandler(Filters.text, gender)],
 
             PHOTO: [CommandHandler('start', start), MessageHandler(Filters.photo, photo),
                     CommandHandler('skip', skip_photo)],
 
-            LOCATION: [CommandHandler('start', start), MessageHandler(Filters.text, location)],
+            DIET: [CommandHandler('start', start), MessageHandler(Filters.text, location)],
 
-            BIO: [CommandHandler('start', start), MessageHandler(Filters.text, bio)],
+            SERVINGS: [CommandHandler('start', start), MessageHandler(Filters.text, bio)],
 
             TIME: [CommandHandler('start', start), MessageHandler(Filters.text, time)],
 
-            DONE: [MessageHandler(Filters.regex('^Confirm$'),
+            CONFIRMATION: [MessageHandler(Filters.regex('^Confirm$'),
                                       done),
             MessageHandler(Filters.regex('^Restart$'),
                                       start)
