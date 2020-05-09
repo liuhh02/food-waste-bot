@@ -155,25 +155,25 @@ def main():
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
+    # Add conversation handler with the states LOCATION, PHOTO, DIET, SERVINGS, TIME, CONFIRMATION
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
 
         states={
 
-            LOCATION: [CommandHandler('start', start), MessageHandler(Filters.text, gender)],
+            LOCATION: [CommandHandler('start', start), MessageHandler(Filters.text, location)],
 
             PHOTO: [CommandHandler('start', start), MessageHandler(Filters.photo, photo),
                     CommandHandler('skip', skip_photo)],
 
-            DIET: [CommandHandler('start', start), MessageHandler(Filters.text, location)],
+            DIET: [CommandHandler('start', start), MessageHandler(Filters.text, diet)],
 
-            SERVINGS: [CommandHandler('start', start), MessageHandler(Filters.text, bio)],
+            SERVINGS: [CommandHandler('start', start), MessageHandler(Filters.text, servings)],
 
             TIME: [CommandHandler('start', start), MessageHandler(Filters.text, time)],
 
             CONFIRMATION: [MessageHandler(Filters.regex('^Confirm$'),
-                                      done),
+                                      confirmation),
             MessageHandler(Filters.regex('^Restart$'),
                                       start)
                        ]
